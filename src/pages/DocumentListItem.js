@@ -29,6 +29,7 @@ class DocumentListItem extends React.Component {
   }
 
   render() {
+    console.log(this.props)
     const { index, status, title, explanation, image, envId, link } = this.props
     const styleCenter = {
       display: 'flex',
@@ -45,10 +46,16 @@ class DocumentListItem extends React.Component {
         icon: 'plus-square'
       },
       RECEBIDO: {
-        color: '#fff0044',
-        icon: 'plus-square'
+        color: 'orange',
+        icon: 'check-square'
+      },
+      REPROVADO: {
+        color: 'red',
+        icon: 'warning'
       }
     }
+
+    console.log(statusConfig[status])
 
     const { Panel } = Collapse;
 

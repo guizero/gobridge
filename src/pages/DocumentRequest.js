@@ -79,9 +79,11 @@ class DocumentRequest extends React.Component {
 
   render() {
     const { loading, requestId, itsPartyTime } = this.state
-    const { Titulo, documentos, Qtd_requisicao, Qtd_resposta, Usuario_criacao } = this.state.requestDocument
+    const { Titulo, documentos, Qtd_requisicao, Qtd_resposta, cliente } = this.state.requestDocument
     const { Nome_Razao } = this.state.requestDocument.escritorio
     const { Circle } = Progress;
+
+    console.log(this.state)
 
     return (
       <LoadingScreen
@@ -104,10 +106,9 @@ class DocumentRequest extends React.Component {
             </Navbar>
           </Header>
           <Content>
-            
             <Row>
               <Col xs={24} style={{backgroundColor: '#7b22ce14', textAlign: 'center', paddingTop: '50px', paddingBottom: '50px', paddingLeft: '15px', paddingRight: '15px'}}>
-                <h1 style={{ marginBottom: '40px' }}> Olá, {Nome_Razao}</h1>
+                <h1 style={{ marginBottom: '40px' }}> Olá, {cliente.Nome_Razao}</h1>
                 <h4><b>{Nome_Razao}</b> está pedindo documentos para:</h4>
                 <h4><b>{Titulo}</b></h4>
               </Col>
@@ -127,8 +128,8 @@ class DocumentRequest extends React.Component {
                       title={item.Titulo}
                       envId={item.ENV_ID}
                       link={item.Link_Download}
-                      explanation='A carteira de identidade é um documento nacional e você consegue pegar a sua cópia em:' // item.TDO_DESCRICAO
-                      image='https://cdn-istoe-ssl.akamaized.net/wp-content/uploads/sites/14/2019/02/rg-novo-divulgacao.jpg'
+                      explanation={item.Descricao} // item.TDO_DESCRICAO
+                      image={item.Imagem}
                       onSuccess={() => this.uploadSuccess()}
                     />
                   )}

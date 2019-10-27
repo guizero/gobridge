@@ -36,12 +36,16 @@ class DocumentListItem extends React.Component {
       height: '30px'
     };
     const statusConfig = {
-      RECEBIDO: {
+      APROVADO: {
         color: 'green',
         icon: 'check-square'
       },
       ABERTO: {
         color: '#f9c108',
+        icon: 'plus-square'
+      },
+      RECEBIDO: {
+        color: '#fff0044',
         icon: 'plus-square'
       }
     }
@@ -66,7 +70,7 @@ class DocumentListItem extends React.Component {
           }}>
             <ButtonToolbar>
               {link && <><a href={link} target='_blank' rel='noopener noreferrer'>Ver  </a></>}
-              <Button onClick={this.toggleDrawer} style={{color: '#ffffff', background: '#7b22ce'}}>{link ? 'Reenviar' : 'Enviar'}</Button>              
+              <Button onClick={this.toggleDrawer} style={{color: '#ffffff', background: '#7b22ce'}}>{link ? 'Reenviar' : 'Enviar'}</Button>
             </ButtonToolbar>
             <Drawer
               show={this.state.show}

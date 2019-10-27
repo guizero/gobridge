@@ -5,6 +5,7 @@ import { Container, Header, Divider, Progress, List, Navbar, Content, FlexboxGri
 import { Row, Col } from 'antd';
 import DocumentListItem from './DocumentListItem'
 import QRCode from 'qrcode.react'
+import Confetti from 'react-dom-confetti';
 
 class DocumentRequest extends React.Component {
   constructor(props) {
@@ -50,6 +51,17 @@ class DocumentRequest extends React.Component {
     this.checkLink()
   }
 
+  uploadSuccess() {
+    this.setState({
+      itsPartyTime: true
+    }, this.stopParty)
+    this.checkLink()
+  }
+
+  stopParty() {
+    setTimeout(() => this.setState({itsPartyTime: false}), 3000)
+  }
+
   checkLink() {
     const axios = require('axios');
     const { requestId } = this.state
@@ -66,12 +78,10 @@ class DocumentRequest extends React.Component {
   }
 
   render() {
-    const { loading, requestId } = this.state
+    const { loading, requestId, itsPartyTime } = this.state
     const { Titulo, documentos, Qtd_requisicao, Qtd_resposta, Usuario_criacao } = this.state.requestDocument
-    const { Nome_Razao } = this.state.requestDocument.cliente
+    const { Nome_Razao } = this.state.requestDocument.escritorio
     const { Circle } = Progress;
-
-    console.log(this.state)
 
     return (
       <LoadingScreen
@@ -94,6 +104,7 @@ class DocumentRequest extends React.Component {
             </Navbar>
           </Header>
           <Content>
+            
             <Row>
               <Col xs={24} style={{backgroundColor: '#7b22ce14', textAlign: 'center', paddingTop: '50px', paddingBottom: '50px', paddingLeft: '15px', paddingRight: '15px'}}>
                 <h1 style={{ marginBottom: '40px' }}> Olá, {Nome_Razao}</h1>
@@ -101,6 +112,9 @@ class DocumentRequest extends React.Component {
                 <h4><b>{Titulo}</b></h4>
               </Col>
             </Row>
+            <div style={{display: 'flex', justifyContent: 'center'}}>
+              <Confetti active={ itsPartyTime } />
+            </div>
             <Divider></Divider>
             <Row>
               <Col xs={24} md={{span: 14, offset: 4}} style={{ textAlign: 'center' }}>
@@ -115,7 +129,7 @@ class DocumentRequest extends React.Component {
                       link={item.Link_Download}
                       explanation='A carteira de identidade é um documento nacional e você consegue pegar a sua cópia em:' // item.TDO_DESCRICAO
                       image='https://cdn-istoe-ssl.akamaized.net/wp-content/uploads/sites/14/2019/02/rg-novo-divulgacao.jpg'
-                      onSuccess={() => this.checkLink()}
+                      onSuccess={() => this.uploadSuccess()}
                     />
                   )}
                 </List>
@@ -131,9 +145,9 @@ class DocumentRequest extends React.Component {
                   <h5><b>Volte quando quiser!</b></h5><br/>
                   Esse link vai ficar disponível até você enviar todos os documentos. <br/><br/><b>Compartilhe-o se necessário</b> para agilizar o processo.
                 </div>
-                <div style={{ textAlign: 'center', backgroundColor: '#f5f5f5', padding: '20px' }}>
+                <div style={{ textAlign: 'center', backgroundColor: '#f5f5f5', padding: '20px', marginBottom: '40px' }}>
                   <QRCode value={"http://link.gobridge.com.br/"+ requestId} />
-                </div>                
+                </div>
               </Col>
             </Row>
           </Content>

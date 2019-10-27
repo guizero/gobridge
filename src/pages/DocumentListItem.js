@@ -23,8 +23,13 @@ class DocumentListItem extends React.Component {
     this.setState({ show: true });
   }
 
+  onSuccessUpload = () => {
+    this.props.onSuccess()
+    this.close()
+  }
+
   render() {
-    const { index, status, title, explanation, image, envId } = this.props
+    const { index, status, title, explanation, image, envId, link } = this.props
     const styleCenter = {
       display: 'flex',
       alignItems: 'center',
@@ -52,42 +57,40 @@ class DocumentListItem extends React.Component {
               fontSize: '1.5em'
             }} />
           </FlexboxGrid.Item>
-          <FlexboxGrid.Item colspan={18} style={styleCenter}>
+          <FlexboxGrid.Item colspan={17} style={styleCenter}>
             <span>{title}</span>
           </FlexboxGrid.Item>
-          <FlexboxGrid.Item colspan={4} style={{
-            ...styleCenter
+          <FlexboxGrid.Item colspan={5} style={{
+            ...styleCenter,
+            justifyContent: 'flex-end'
           }}>
             <ButtonToolbar>
-              <Button onClick={this.toggleDrawer}>Enviar</Button>
+              {link && <><a href={link} target='_blank' rel='noopener noreferrer'>Ver  </a></>}
+              <Button onClick={this.toggleDrawer} style={{color: '#ffffff', background: '#7b22ce'}}>{link ? 'Reenviar' : 'Enviar'}</Button>              
             </ButtonToolbar>
             <Drawer
               show={this.state.show}
               onHide={this.close}
-              size='md'
+              size='sm'
             >
               <Drawer.Header>
                 <Drawer.Title><h3>{title}</h3></Drawer.Title>
               </Drawer.Header>
               <Drawer.Body>
-                <div style={{ width: '100%', heigth: '200px', marginBottom: '40px' }}>
-                  <Uploader envId={envId}/>
-                </div>
                 <div>
-                <Collapse bordered={false} defaultActiveKey={['1']}>
+                <Collapse bordered={false} defaultActiveKey={['1']} style={{width: '100%'}}>
                   <Panel header="O que é e onde consigo este documento?" key="1">
                     {explanation}
                   </Panel>
                   <Panel header="Veja um exemplo" key="2">
-                    <img src={image} alt='Documento exemplo' />
+                    <img src={image} alt='Documento exemplo' style={{width: '100%'}} />
                   </Panel>
                 </Collapse>
                 </div>
+                <div style={{ marginBottom: '40px' }}>
+                  <Uploader envId={envId} onSuccess={this.onSuccessUpload}/>
+                </div>
               </Drawer.Body>
-              <Drawer.Footer>
-                <Button onClick={this.close} appearance="primary">Confirm</Button>
-                <Button onClick={this.close} appearance="subtle">Cancel</Button>
-              </Drawer.Footer>
             </Drawer>
           </FlexboxGrid.Item>
         </FlexboxGrid>

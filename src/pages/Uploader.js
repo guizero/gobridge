@@ -11,7 +11,11 @@ import '@uppy/dashboard/dist/style.css'
 class Uploader extends React.Component {
     constructor(props) {
         super(props)
-        this.uppy = new Uppy({ id: 'uppy1', autoProceed: true, debug: true, locale: Portugues })
+        this.uppy = new Uppy({
+            id: 'uppy1', autoProceed: true, debug: true, locale: Portugues, maxWidth: 300,
+            maxHeight: 350,
+            inline: true,
+        })
             .use(GoogleDrive, { companionUrl: 'https://companion.uppy.io' })
             .use(Webcam, {
                 onBeforeSnapshot: () => Promise.resolve(),
@@ -28,10 +32,13 @@ class Uploader extends React.Component {
                 locale: {}
             })
             .use(XHRUpload, {
-                endpoint: 'https://gobridge.com.br/backend/gobridge/ws/documentUpload/?ENV_ID='+props.envId,
+                endpoint: 'https://gobridge.com.br/backend/gobridge/ws/documentUpload/?ENV_ID=' + props.envId,
                 formData: true,
                 fieldName: 'files[]'
-            })
+            }) 
+            .on('upload-success', (file, response) => {
+                props.onSuccess(response)
+              })
 
     }
     componentWillUnmount() {
@@ -43,6 +50,7 @@ class Uploader extends React.Component {
             <Dashboard
                 uppy={this.uppy}
                 plugins={['GoogleDrive', 'Webcam']}
+                heigth='150'
                 metaFields={[
                     { id: 'name', name: 'Name', placeholder: 'File name' }
                 ]}

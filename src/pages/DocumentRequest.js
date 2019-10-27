@@ -1,6 +1,7 @@
 import React from 'react';
 import 'rsuite/dist/styles/rsuite-default.css';
 import { Container, Header, Divider, Progress, List, Navbar, Content, FlexboxGrid } from 'rsuite';
+import { Row, Col } from 'antd';
 import DocumentListItem from './DocumentListItem'
 
 class DocumentRequest extends React.Component {
@@ -46,7 +47,7 @@ class DocumentRequest extends React.Component {
     const axios = require('axios');
     const { requestId } = this.state
 
-    axios.get('http://gobridge.com.br/backend/gobridge/ws/documentRequest/?HashID=' + requestId)
+    axios.get('https://gobridge.com.br/backend/gobridge/ws/documentRequest/?HashID=' + requestId)
       .then((response) => {
         this.setState({
           requestDocument: response.data.data.demanda
@@ -55,7 +56,7 @@ class DocumentRequest extends React.Component {
   }
 
   render() {
-    const { Titulo, documentos, Qtd_requisicao, Qtd_resposta } = this.state.requestDocument
+    const { Titulo, documentos, Qtd_requisicao, Qtd_resposta, Usuario_criacao } = this.state.requestDocument
     const { Nome_Razao } = this.state.requestDocument.cliente
     const { Circle } = Progress;
 
@@ -66,22 +67,22 @@ class DocumentRequest extends React.Component {
             <Navbar appearance="inverse" style={{backgroundColor: '#7b21ce'}}>
               <FlexboxGrid justify="center">
                 <Navbar.Header>
-                  <img src='http://gobridge.com.br/wp-content/uploads/2019/10/logogo.resized.png' alt='teste' style={{height: '60px'}}/>
+                  <img src='https://gobridge.com.br/wp-content/uploads/2019/10/logogo.resized.png' alt='teste' style={{height: '60px'}}/>
                 </Navbar.Header>
               </FlexboxGrid>
             </Navbar>
           </Header>
           <Content>
-            <FlexboxGrid justify="center" style={{backgroundColor: '#7b22ce14'}}>
-              <FlexboxGrid.Item colspan={12} style={{ textAlign: 'center', paddingTop: '50px', paddingBottom: '50px' }}>
+            <Row>
+              <Col xs={24} style={{backgroundColor: '#7b22ce14', textAlign: 'center', paddingTop: '50px', paddingBottom: '50px', paddingLeft: '15px', paddingRight: '15px'}}>
                 <h1 style={{ marginBottom: '40px' }}> Olá, {Nome_Razao}</h1>
-                <h4> O escritório Demarest está pedindo documentos para:</h4>
-                <h4>{Titulo}</h4>
-              </FlexboxGrid.Item>
-            </FlexboxGrid>
+                <h4><b>{Usuario_criacao}</b>, do <b>{Nome_Razao}</b> está pedindo documentos para:</h4>
+                <h4><b>{Titulo}</b></h4>
+              </Col>
+            </Row>
             <Divider></Divider>
-            <FlexboxGrid justify="center">
-              <FlexboxGrid.Item colspan={10} style={{ textAlign: 'center' }}>
+            <Row>
+              <Col xs={24} md={{span: 14, offset: 4}} style={{ textAlign: 'center' }}>
                 <h3>Documentos</h3>
                 <List>
                   {documentos.map((item, index) =>
@@ -89,19 +90,20 @@ class DocumentRequest extends React.Component {
                       index={index}
                       status={item.Status}
                       title={item.Titulo}
+                      envId={item.ENV_ID}
                       explanation='A carteira de identidade é um documento nacional e você consegue pegar a sua cópia em:' // item.TDO_DESCRICAO
                       image='https://cdn-istoe-ssl.akamaized.net/wp-content/uploads/sites/14/2019/02/rg-novo-divulgacao.jpg'
                     />
                   )}
                 </List>
-              </FlexboxGrid.Item>
-              <FlexboxGrid.Item colspan={4} style={{ textAlign: 'center', backgroundColor: '#f5f5f5', marginLeft: '40px', padding: '20px' }}>
+              </Col>
+              <Col xs={24} md={{span: 3, offset: 1}} style={{ textAlign: 'center', backgroundColor: '#f5f5f5', padding: '20px' }}>
                 <div style={{ width: '120px', textAlign: 'center', display: 'inline-block' }}>
                   <Circle percent={Math.round((Qtd_resposta/Qtd_requisicao) * 100)} strokeColor="#7b22ce" />
                 </div>
                 <p>{Qtd_resposta} de {Qtd_requisicao} documentos entregues</p>
-              </FlexboxGrid.Item>
-            </FlexboxGrid>
+              </Col>
+            </Row>
           </Content>
         </Container>
       </div>

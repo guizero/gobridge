@@ -2,7 +2,8 @@ import React from 'react';
 import 'rsuite/dist/styles/rsuite-default.css';
 import 'antd/dist/antd.css';
 import { Button, ButtonToolbar, Drawer, Icon, List, FlexboxGrid } from 'rsuite';
-import { Upload, Icon as Icon2, message, Collapse } from 'antd';
+import { Collapse } from 'antd';
+import Uploader from './Uploader'
 
 class DocumentListItem extends React.Component {
   constructor(props) {
@@ -23,42 +24,25 @@ class DocumentListItem extends React.Component {
   }
 
   render() {
-    const { index, status, title, explanation, image } = this.props
+    const { index, status, title, explanation, image, envId } = this.props
     const styleCenter = {
       display: 'flex',
       alignItems: 'center',
       height: '30px'
     };
     const statusConfig = {
-      ok: {
+      RECEBIDO: {
         color: 'green',
         icon: 'check-square'
       },
       ABERTO: {
-        color: 'yellow',
-        icon: 'square'
+        color: '#f9c108',
+        icon: 'plus-square'
       }
     }
-    const { Dragger } = Upload;
-    const props = {
-      name: 'file',
-      multiple: true,
-      action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
-      onChange(info) {
-        const { status } = info.file;
-        if (status !== 'uploading') {
-          console.log(info.file, info.fileList);
-        }
-        if (status === 'done') {
-          message.success(`${info.file.name} file uploaded successfully.`);
-        } else if (status === 'error') {
-          message.error(`${info.file.name} file upload failed.`);
-        }
-      },
-    };
 
     const { Panel } = Collapse;
-    
+
     return (
       <List.Item key={index} index={index}>
         <FlexboxGrid>
@@ -87,15 +71,7 @@ class DocumentListItem extends React.Component {
               </Drawer.Header>
               <Drawer.Body>
                 <div style={{ width: '100%', heigth: '200px', marginBottom: '40px' }}>
-                  <Dragger {...props}>
-                    <p className="ant-upload-drag-icon">
-                      <Icon2 type="inbox" />
-                    </p>
-                    <p className="ant-upload-text">Clique ou arraste os arquivos nesta área para enviar</p>
-                    <p className="ant-upload-hint">
-                      Tenha certeza que o documento está em boa qualidade e legível.
-                    </p>
-                  </Dragger>
+                  <Uploader envId={envId}/>
                 </div>
                 <div>
                 <Collapse bordered={false} defaultActiveKey={['1']}>

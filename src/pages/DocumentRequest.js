@@ -4,6 +4,7 @@ import LoadingScreen from 'react-loading-screen';
 import { Container, Header, Divider, Progress, List, Navbar, Content, FlexboxGrid } from 'rsuite';
 import { Row, Col } from 'antd';
 import DocumentListItem from './DocumentListItem'
+import QRCode from 'qrcode.react'
 
 class DocumentRequest extends React.Component {
   constructor(props) {
@@ -65,7 +66,7 @@ class DocumentRequest extends React.Component {
   }
 
   render() {
-    const { loading } = this.state
+    const { loading, requestId } = this.state
     const { Titulo, documentos, Qtd_requisicao, Qtd_resposta, Usuario_criacao } = this.state.requestDocument
     const { Nome_Razao } = this.state.requestDocument.cliente
     const { Circle } = Progress;
@@ -126,10 +127,13 @@ class DocumentRequest extends React.Component {
                   </div>
                   <p>{Qtd_resposta} de {Qtd_requisicao} documentos entregues</p>
                 </div>
-                <div style={{ textAlign: 'center', backgroundColor: '#f5f5f5', padding: '20px' }}>
-                  <h5>Volte quando quiser!</h5><br/>
+                <div style={{ textAlign: 'center', backgroundColor: '#f5f5f5', padding: '20px', marginBottom: '20px' }}>
+                  <h5><b>Volte quando quiser!</b></h5><br/>
                   Esse link vai ficar disponível até você enviar todos os documentos. <br/><br/><b>Compartilhe-o se necessário</b> para agilizar o processo.
                 </div>
+                <div style={{ textAlign: 'center', backgroundColor: '#f5f5f5', padding: '20px' }}>
+                  <QRCode value={"http://link.gobridge.com.br/"+ requestId} />
+                </div>                
               </Col>
             </Row>
           </Content>
